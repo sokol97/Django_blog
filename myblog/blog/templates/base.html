@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+ <head>
+ <title>{% block title %}{% endblock %}</title>
+ <link href="{% static 'css/base.css' %}" rel="stylesheet">
+ </head>
+ <body>
+ <div id="header">
+ <span class="logo">Наш сайт</span>
+{% if request.user.is_authenticated %}
+ <ul class="menu">
+ <li {% if section == "dashboard" %} class="selected"{% endif %}>
+ <a href="{% url 'blog:dashboard' %}">My dashboard</a>
+ </li>
+ <li> {% if section == "images" %}class="selected"{% endif %}
+ <a href="#">Images</a>
+ </li>
+ <li> {% if section == "people" %}class="selected"{% endif %}
+ <a href="#">People</a>
+ </li>
+   <li> {% if section == "password" %}class="selected"{% endif %}
+ <a href="{% url 'pas_change' %}">Сменить пароль</a>
+ </li>
+  <li> {% if section == "edit" %}class="selected"{% endif %}
+ <a href="{% url 'blog:edit' %}">Редактировать профиль</a>
+ </li>
+ </ul>
+ {% endif %}
+ <span class="user">
+  {% if request.user.is_authenticated %}
+ Hello {{ request.user.first_name }},
+ <a href="{% url 'logout' %}">Выйти</a>
+ {% else %}
+ <a href="{% url 'login' %}">Войти</a>
+ {% endif %}
+ </span>
+ </div>
+ <div id="content">
+ {% block content %}{% endblock %}
+ </div>
+  {% if messages %}
+ <ul class="messages">
+ <li>
+{% for message in messages %}
+{{ message }}
+{% endfor %}
+</li>
+  </ul>
+ {% endif %}
+ </body>
+</html>
